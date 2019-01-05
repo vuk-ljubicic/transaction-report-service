@@ -4,6 +4,7 @@ import com.n26.transaction.stats.model.Transaction;
 import com.n26.transaction.stats.model.TransactionStats;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -12,11 +13,26 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 @Service
 public class TransactionStatsServiceImpl implements TransactionStatsService{
-    public static final int TRANSACTION_STATS_LOOK_BACK = 60;
+    public static final int TRANSACTION_STATS_LOOK_BACK_SECONDS = 60;
+    public static final int CACHE_CLEANUP_THREAD_SLEEP_MINUTES = 1;
     private ConcurrentNavigableMap<LocalDateTime, TransactionStats> transactionStatsCache;
 
     public TransactionStatsServiceImpl() {
         transactionStatsCache = new ConcurrentSkipListMap<>();
+    }
+
+    @PostConstruct
+    public void initTransactionStatsCacheCleanup(){
+        (new Thread(() -> {
+            try {
+                transactionStatsCache.headMap(getTransactionStatsLookBack()).forEach((k, v) -> {
+                    transactionStatsCache.remove(k);
+                });
+                Thread.sleep(CACHE_CLEANUP_THREAD_SLEEP_MINUTES);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        })).start();
     }
 
     @Override
@@ -63,7 +79,7 @@ public class TransactionStatsServiceImpl implements TransactionStatsService{
 
     private LocalDateTime getTransactionStatsLookBack() {
         LocalDateTime transactionStatsLookBack = LocalDateTime.now().withNano(0).
-                minusSeconds(TRANSACTION_STATS_LOOK_BACK);
+                minusSeconds(TRANSACTION_STATS_LOOK_BACK_SECONDS);
         return transactionStatsLookBack;
     }
 }
