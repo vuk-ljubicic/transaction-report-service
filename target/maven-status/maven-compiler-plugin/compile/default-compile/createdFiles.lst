@@ -1,0 +1,6 @@
+com\n26\transaction\stats\model\Transaction.class
+com\n26\transaction\stats\service\TransactionStatsService.class
+com\n26\transaction\stats\model\TransactionStats.class
+com\n26\transaction\stats\controller\TransactionStatsController.class
+com\n26\transaction\stats\Application.class
+com\n26\transaction\stats\service\TransactionStatsServiceImpl.class

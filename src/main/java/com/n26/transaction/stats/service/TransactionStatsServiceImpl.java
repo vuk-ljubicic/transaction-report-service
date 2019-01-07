@@ -67,6 +67,15 @@ public class TransactionStatsServiceImpl implements TransactionStatsService{
         return transactionStats;
     }
 
+    @Override
+    public boolean validateTransaction(Transaction transaction) {
+        if(transaction != null){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private LocalDateTime getTransactionSecond(Transaction transaction) {
         LocalDateTime transactionTimestamp = LocalDateTime.ofInstant(Instant.ofEpochMilli(transaction.getTimestamp()),
                 ZoneId.systemDefault()).withNano(0);
@@ -78,8 +87,12 @@ public class TransactionStatsServiceImpl implements TransactionStatsService{
     }
 
     private LocalDateTime getTransactionStatsLookBack() {
-        LocalDateTime transactionStatsLookBack = LocalDateTime.now().withNano(0).
+        LocalDateTime transactionStatsLookBack = getNow().withNano(0).
                 minusSeconds(TRANSACTION_STATS_LOOK_BACK_SECONDS);
         return transactionStatsLookBack;
+    }
+
+    public LocalDateTime getNow(){
+        return LocalDateTime.now();
     }
 }

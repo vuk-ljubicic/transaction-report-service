@@ -11,6 +11,18 @@ public class TransactionStats {
 
     private long count;
 
+    public TransactionStats() {
+
+    }
+
+    public TransactionStats(double sum, double avg, double max, double min, long count) {
+        this.sum = sum;
+        this.avg = avg;
+        this.max = max;
+        this.min = min;
+        this.count = count;
+    }
+
     public double getSum() {
         return sum;
     }
@@ -49,5 +61,22 @@ public class TransactionStats {
 
     public synchronized void setCount(long count) {
         this.count = count;
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if(obj == null || !(obj instanceof TransactionStats)){
+            return false;
+        } else {
+            if(this.count == ((TransactionStats) obj).count &&
+            this.min == ((TransactionStats) obj).min &&
+            this.max == ((TransactionStats) obj).max &&
+            this.avg == ((TransactionStats) obj).avg &&
+            this.sum == ((TransactionStats) obj).sum){
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }
