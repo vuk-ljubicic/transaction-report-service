@@ -27,7 +27,7 @@ public class TransactionStats {
         return sum;
     }
 
-    public synchronized void setSum(double sum) {
+    public void setSum(double sum) {
         this.sum = sum;
     }
 
@@ -35,7 +35,7 @@ public class TransactionStats {
         return avg;
     }
 
-    public synchronized void setAvg(double avg) {
+    public void setAvg(double avg) {
         this.avg = avg;
     }
 
@@ -43,7 +43,7 @@ public class TransactionStats {
         return max;
     }
 
-    public synchronized void setMax(double max) {
+    public void setMax(double max) {
         this.max = max;
     }
 
@@ -51,7 +51,7 @@ public class TransactionStats {
         return min;
     }
 
-    public synchronized void setMin(double min) {
+    public void setMin(double min) {
         this.min = min;
     }
 
@@ -59,7 +59,7 @@ public class TransactionStats {
         return count;
     }
 
-    public synchronized void setCount(long count) {
+    public void setCount(long count) {
         this.count = count;
     }
 

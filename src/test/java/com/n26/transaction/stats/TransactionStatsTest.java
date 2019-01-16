@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(JUnit4.class)
 public class TransactionStatsTest {
@@ -26,7 +25,7 @@ public class TransactionStatsTest {
     private TransactionStatsServiceImpl transactionStatsService;
 
     @Before
-    private void setUp() {
+    public void setUp() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime testTime = LocalDateTime.parse(TEST_TIME_LITERAL, formatter);
         serviceInput = new ArrayList<>();
@@ -47,13 +46,14 @@ public class TransactionStatsTest {
         serviceInput.add(new Transaction(80, testTime.plusSeconds(10).
                 atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()));
         statsOutput = new TransactionStats(150, 50, 60, 40, 3);
-        transactionStatsService = mock(TransactionStatsServiceImpl.class);
+        transactionStatsService = new TransactionStatsServiceImpl();
+        transactionStatsService = spy(transactionStatsService);
         when(transactionStatsService.getNow()).thenReturn(testTime);
     }
 
     @Test
     public void transactionStatsTest() {
-        serviceInput.stream().forEach(t -> serviceInput.add(t));
+        serviceInput.forEach(t -> transactionStatsService.insertTransaction(t));
         assertTrue(statsOutput.equals(transactionStatsService.getLookBackTransactionStats()));
 
     }
